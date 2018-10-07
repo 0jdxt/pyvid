@@ -1,4 +1,8 @@
 ffmpeg-python==0.1.16
 click==7.0
 hurry.filesize==0.9.0
-click-spinner==0.1.8
+click-spinner==0.1.8pytest==3.8
+pytest-cov==2.6
+prospector==1.1
+mypy==0.630.0
+sphinx-click==1.3

@@ -8,12 +8,12 @@ for dep in data['dependencies']:
     reqs.append(dep + '==' + data['dependencies'][dep][1:])
 
 with open('requirements.txt', 'w') as f:
-    print('\n'.join(reqs), file=f)
+    print('\n'.join(reqs), file=f, end='')
 
 
 dreqs = []
 for ddep in data['dev-dependencies']:
     dreqs.append(ddep + '==' + data['dev-dependencies'][ddep][1:])
 
-with open('requirements-dev.txt', 'w') as f:
+with open('requirements.txt', 'a') as f:
     print('\n'.join(dreqs), file=f)
