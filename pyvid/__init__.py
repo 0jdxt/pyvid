@@ -10,21 +10,20 @@ from pyvid.classes import Logger, Video, VideoPath
 
 __version__ = '0.0.4'
 
-__all__ = ['main']
 
 @click.command()
-@click.argument('folder', type=click.Path(exists=True))
+@click.argument('path', type=click.Path(exists=True))
 @click.option('-e', '--ext', help='File extension to look for')
 @click.option('-y', '--force', is_flag=True, help='Disable convert prompt')
 @click.option('-d', '--rem', is_flag=True, help='Delete source video file(s)')
 @click.version_option()
-def main(folder:str, ext:str, force:bool, rem:bool) -> None:
+def main(path:str, ext:str, force:bool, rem:bool) -> None:
     if ext:
         click.echo(f'extension: {ext}')
 
     logger = Logger('stats.txt')
 
-    vp = VideoPath(folder, ext=ext, force=force, rem=rem)
+    vp = VideoPath(path, ext=ext, force=force, rem=rem)
     convert_files(vp, logger)
 
 
