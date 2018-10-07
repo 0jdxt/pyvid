@@ -1,5 +1,0 @@
-pytest==3.8
-pytest-cov==2.6
-prospector==1.1
-mypy==0.630.0
-sphinx-click==1.3
