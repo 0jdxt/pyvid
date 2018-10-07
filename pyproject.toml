@@ -1,10 +1,10 @@
 [tool.poetry]
 name = 'pyvid'
-version = '0.0.4'
-description = "Video conversion utility"
+version = '0.0.5'
+description = 'Video conversion utility using ffmpeg'
 
 authors = [
-    "jdxt <jytrn@protonmail.com>"
+    'jdxt <jytrn@protonmail.com>'
 ]
 
 readme = 'README.md'
@@ -14,17 +14,37 @@ homepage = 'https://github.com/0jdxt/pyvid'
 
 keywords = ['video', 'conversion', 'tools']
 
+classifiers = [
+    'Development Status :: 3 - Alpha',
+    'Environment :: Console',
+    'Environment :: Win32 (MS Windows)',
+    'Intended Audience :: Devleopers',
+    'Intended Audience :: Education',
+    'License :: Freeware',
+    'Natural Language :: English',
+    'Operating System :: Microsoft :: Windows :: Windows 10',
+    'Programming Language :: Python',
+    'Programming Language :: Python :: 3.6',
+    'Programming Language :: Python :: 3.7',
+    'Topic :: Multimedia :: Video :: Conversion',
+    'Topic :: Utilities'
+]
+
+project_urls = {
+    'Source': 'https://github.com/0jdxt/pyvid'
+}
+
 [tool.poetry.dev-dependencies]
-pytest = "^3.8"
-pytest-cov = "^2.6"
-prospector = "^1.1"
-mypy = "^0.630.0"
+pytest = '^3.8'
+pytest-cov = '^2.6'
+prospector = '^1.1'
+mypy = '^0.630.0'
 
 [tool.poetry.dependencies]
-ffmpeg-python = "^0.1.16"
-click = "^7.0"
-"hurry.filesize" = "^0.9.0"
-click-spinner = "^0.1.8"
+ffmpeg-python = '^0.1.16'
+click = '^7.0'
+'hurry.filesize' = '^0.9.0'
+click-spinner = '^0.1.8'
 
 [tool.poetry.scripts]
-pyvid = "pyvid:main"
+pyvid = 'pyvid:main'
