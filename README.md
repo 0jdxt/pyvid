@@ -1,5 +1,8 @@
 # pyvid 0.0.5-alpha
 
+[![Documentation Status](https://readthedocs.org/projects/pyvid/badge/?version=latest)](https://pyvid.readthedocs.io/en/latest/?badge=latest)
+
+
 ## Dependencies
 - [install](https://www.ffmpeg.org/download.html)
   ffmpeg and make sure the executable is in PATH
