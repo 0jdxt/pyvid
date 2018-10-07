@@ -1,3 +1,1 @@
-# init packaging
-
-pyvid
+# pyvid
