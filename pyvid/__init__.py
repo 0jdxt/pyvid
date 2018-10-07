@@ -8,7 +8,7 @@ import click_spinner as spin
 from pyvid.classes import Logger, Video, VideoPath
 
 
-__version__ = '0.1.0'
+__version__ = '0.0.3'
 
 @click.command()
 @click.argument('folder', type=click.Path(exists=True))
