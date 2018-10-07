@@ -9,10 +9,10 @@ authors = [
 
 readme = 'README.md'
 
-repository = 'https://github.com/0jdxt/pyvid'
-homepage = 'https://github.com/0jdxt/pyvid'
+license = 'MIT'
 
-keywords = ['video', 'conversion', 'tools']
+homepage = 'https://github.com/0jdxt/pyvid'
+repository = 'https://github.com/0jdxt/pyvid'
 
 classifiers = [
     'Development Status :: 3 - Alpha',
@@ -30,9 +30,11 @@ classifiers = [
     'Topic :: Utilities'
 ]
 
-project_urls = {
-    'Source': 'https://github.com/0jdxt/pyvid'
-}
+keywords = 'windows cli video conversion ffmpeg tools'
+
+project_urls = {Source = 'https://github.com/0jdxt/pyvid'}
+
+packages = [{include = 'pyvid'}]
 
 [tool.poetry.dev-dependencies]
 pytest = '^3.8'
