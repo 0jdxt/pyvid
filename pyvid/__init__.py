@@ -8,7 +8,7 @@ import click_spinner as spin
 from pyvid.classes import Logger, Video, VideoPath
 
 
-__version__ = '0.0.3'
+__version__ = '0.0.4'
 
 __all__ = ['main']
 

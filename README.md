@@ -1,4 +1,4 @@
-# pyvid
+# pyvid 0.0.4
 
 ## Usage
 ```
