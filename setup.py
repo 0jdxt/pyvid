@@ -14,7 +14,7 @@ setuptools.setup(
     description='Video conversion utility',
     long_description=long_description,
     long_description_content_type='text/markdown',
-    url='github.com/0jdxt/pyvid',
+    url='https://github.com/0jdxt/pyvid',
     install_requires=['click', 'hurry.filesize', 'ffmpeg-python', 'click-spinner'],
     packages=setuptools.find_packages(),
     entry_points='[console_scripts]\npyvid=pyvid:main'
