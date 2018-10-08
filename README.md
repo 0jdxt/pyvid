@@ -1,4 +1,4 @@
-# pyvid 0.0.5-alpha
+# pyvid 0.0.6-alpha
 
 [![Documentation Status](https://readthedocs.org/projects/pyvid/badge/?version=latest)](https://pyvid.readthedocs.io/en/latest/?badge=latest)
 
