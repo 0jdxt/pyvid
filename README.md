@@ -1,6 +1,9 @@
 # pyvid 0.0.6-alpha
 
+[![PyPI version](https://badge.fury.io/py/pyvid.svg)](https://badge.fury.io/py/pyvid)
+[![GitHub license](https://img.shields.io/github/license/0jdxt/pyvid.svg)](https://github.com/0jdxt/pyvid/blob/master/LICENSE.md)
 [![Documentation Status](https://readthedocs.org/projects/pyvid/badge/?version=latest)](https://pyvid.readthedocs.io/en/latest/?badge=latest)
+
 
 
 ## Dependencies
@@ -11,15 +14,15 @@
 ## Installation
 
 Install as global executable
-```cmd
->pip install pyvid
+```
+pip install pyvid
 ```
 
 ## Usage
 
 The following
-```cmd
->pyvid files -e avi
+```
+pyvid files -e avi
 ```
 will convert all `.avi` files in directory `files/` to output directory `converted/files/`
 
