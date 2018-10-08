@@ -30,6 +30,8 @@ classifiers = [
     'Topic :: Utilities'
 ]
 
+python_requires = '>=3.6'
+
 keywords = ['windows', 'cli', 'video', 'conversion', 'ffmpeg', 'tools']
 
 packages = [{include = 'pyvid'}]
