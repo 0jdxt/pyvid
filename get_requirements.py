@@ -1,3 +1,5 @@
+#!usr/bin/env python
+# called by pre-commmit hook
 import pytoml as toml
 
 with open('pyproject.toml', 'r') as f:
@@ -7,13 +9,8 @@ reqs = []
 for dep in data['dependencies']:
     reqs.append(dep + '==' + data['dependencies'][dep][1:])
 
+for ddep in data['dev-dependencies']:
+    reqs.append(ddep + '==' + data['dev-dependencies'][ddep][1:])
+
 with open('requirements.txt', 'w') as f:
     print('\n'.join(reqs), file=f)
-
-
-dreqs = []
-for ddep in data['dev-dependencies']:
-    dreqs.append(ddep + '==' + data['dev-dependencies'][ddep][1:])
-
-with open('requirements.txt', 'a') as f:
-    print('\n'.join(dreqs), file=f)

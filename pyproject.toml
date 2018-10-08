@@ -13,6 +13,7 @@ license = 'MIT'
 
 homepage = 'https://github.com/0jdxt/pyvid'
 repository = 'https://github.com/0jdxt/pyvid'
+documentation = 'https://pyvid.readthedocs.io/en/latest/'
 
 classifiers = [
     'Development Status :: 3 - Alpha',
@@ -30,7 +31,6 @@ classifiers = [
     'Topic :: Utilities'
 ]
 
-python_requires = '>=3.6'
 
 keywords = ['windows', 'cli', 'video', 'conversion', 'ffmpeg', 'tools']
 
@@ -48,6 +48,7 @@ ffmpeg-python = '^0.1.16'
 click = '^7.0'
 'hurry.filesize' = '^0.9.0'
 click-spinner = '^0.1.8'
+pytoml = "^0.1.19"
 
 [tool.poetry.scripts]
 pyvid = 'pyvid:main'

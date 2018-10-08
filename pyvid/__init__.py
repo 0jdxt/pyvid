@@ -4,11 +4,14 @@ from typing import List, Tuple
 import ffmpeg
 import click
 import click_spinner as spin
+import pytoml
 
 from pyvid.classes import Logger, Video, VideoPath
 
 
-__version__ = '0.0.4'
+with open('pyproject.toml', 'r') as f:
+    poetry_conf = pytoml.load(f)
+__version__ = poetry_conf['tool']['poetry']['version']
 
 
 @click.command()
