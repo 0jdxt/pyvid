@@ -6,8 +6,8 @@ from pyvid.classes import VideoPath, Video
 
 
 def test_file_vpath_file() -> None:
-    fs = VideoPath('setup.cfg', ext='cfg')
-    fi = Video(Path('setup.cfg'), force=False)
+    fs = VideoPath("setup.cfg", ext="cfg")
+    fi = Video(Path("setup.cfg"), force=False)
 
     for fname in fs:
         assert fname == fi
@@ -16,11 +16,11 @@ def test_file_vpath_file() -> None:
 
 
 def test_file_vpath_folder() -> None:
-    folder = 'files'
+    folder = "files"
     p = Path(folder)
     fs = VideoPath(folder)
 
-    files = [p/('Carne_job.' + x) for x in ['mp4', 'mov', 'webm']]
+    files = [p / ("Carne_job." + x) for x in ["mp4", "mov", "webm"]]
 
     for i, fname in enumerate(fs):
         assert fname == files[i]

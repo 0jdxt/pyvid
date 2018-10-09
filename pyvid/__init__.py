@@ -12,23 +12,23 @@ import pytoml
 from pyvid.classes import Logger, Video, VideoPath
 
 
-with open('pyproject.toml', 'r') as f:
+with open("pyproject.toml", "r") as f:
     poetry_conf = pytoml.load(f)
-__version__ = poetry_conf['tool']['poetry']['version']
+__version__ = poetry_conf["tool"]["poetry"]["version"]
 
 
 @click.command()
-@click.argument('path', type=click.Path(exists=True))
-@click.option('-e', '--ext', help='File extension to look for')
-@click.option('-y', '--force', is_flag=True, help='Disable convert prompt')
-@click.option('-d', '--rem', is_flag=True, help='Delete source video file(s)')
+@click.argument("path", type=click.Path(exists=True))
+@click.option("-e", "--ext", help="File extension to look for")
+@click.option("-y", "--force", is_flag=True, help="Disable convert prompt")
+@click.option("-d", "--rem", is_flag=True, help="Delete source video file(s)")
 @click.version_option()
 def main(path: str, ext: str, force: bool, rem: bool) -> None:
     """Convert video(s) in specified path."""
     if ext:
-        click.echo(f'extension: {ext}')
+        click.echo(f"extension: {ext}")
 
-    logger = Logger('stats.txt')
+    logger = Logger("stats.txt")
 
     vp = VideoPath(path, ext=ext, force=force, rem=rem)
     convert_files(vp, logger)
@@ -42,7 +42,7 @@ def convert_files(vids: VideoPath, logger: Logger) -> None:
     for vid in vids:
         click.echo()
         if n_proc == 0:
-            logger.log(f'CONVERTING FILES IN {top}')
+            logger.log(f"CONVERTING FILES IN {top}")
 
         success, code = convert_video(vid)
 
@@ -62,58 +62,58 @@ def convert_files(vids: VideoPath, logger: Logger) -> None:
         max_lines = 3
         click.echo()
         if n_proc > max_lines:
-            click.echo('...')
+            click.echo("...")
         n_lines = max_lines if n_proc > max_lines else n_proc + 1
-        click.echo(''.join(logger.get(n_lines)))
+        click.echo("".join(logger.get(n_lines)))
         if n_proc > max_lines:
-            click.echo(f'see {logger.fname} for more details')
+            click.echo(f"see {logger.fname} for more details")
     else:
         logger.reset()
-        click.echo(f'NO VIDEO FILES CONVERTED IN {top}')
+        click.echo(f"NO VIDEO FILES CONVERTED IN {top}")
 
 
 def convert_video(vid: Video) -> Tuple[bool, int]:
     """Use fmmpeg to convert Video object."""
-    prompt = click.style(str(vid.path), fg='yellow')
-    prompt += ' -> '
-    prompt += click.style(str(vid.conv_path.parent), fg='green') + '\\'
-    prompt += click.style(vid.conv_path.name, fg='yellow') + '\n'
+    prompt = click.style(str(vid.path), fg="yellow")
+    prompt += " -> "
+    prompt += click.style(str(vid.conv_path.parent), fg="green") + "\\"
+    prompt += click.style(vid.conv_path.name, fg="yellow") + "\n"
 
     if not vid.force:
-        prompt += 'continue? (y)es/(n)o/(c)ancel all'
+        prompt += "continue? (y)es/(n)o/(c)ancel all"
     click.echo(prompt)
-    opt = 'y' if vid.force else click.getchar()
+    opt = "y" if vid.force else click.getchar()
 
-    if opt == 'y':
+    if opt == "y":
         os.makedirs(vid.conv_path.parent, exist_ok=True)
 
         stream = ffmpeg.input(str(vid.path))
         stream = ffmpeg.output(
             stream,
             str(vid.conv_path),
-            vcodec='libx264',
+            vcodec="libx264",
             crf=20,
-            acodec='copy',
-            preset='veryfast')
+            acodec="copy",
+            preset="veryfast",
+        )
 
-        click.echo(f'converting {vid.path}...', nl=False)
+        click.echo(f"converting {vid.path}...", nl=False)
         try:
             with spin.spinner():
-                err, out = ffmpeg.run(stream, quiet=True,
-                                      overwrite_output=True)
+                err, out = ffmpeg.run(stream, quiet=True, overwrite_output=True)
         except KeyboardInterrupt:
-            click.echo('aborted')
+            click.echo("aborted")
             os.remove(vid.conv_path)
             vid.conv_path.parent.rmdir()
             return False, 0
         except FileNotFoundError:
-            raise OSError('ffmpeg is either not installed or not in PATH')
+            raise OSError("ffmpeg is either not installed or not in PATH")
 
-        click.echo('done')
+        click.echo("done")
         vid.converted = vid.conv_path.stat().st_size
         return True, 0
 
-    if opt == 'c':
+    if opt == "c":
         return False, 1
     # default option n
     return False, 0

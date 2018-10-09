@@ -53,3 +53,8 @@ pytoml = "^0.1.19"
 
 [tool.poetry.scripts]
 pyvid = 'pyvid:main'
+
+[tool.black]
+py37 = true
+include = '\.py$'
+exclude = '^(\.vscode|build)$'
