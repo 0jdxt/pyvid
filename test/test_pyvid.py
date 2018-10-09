@@ -32,4 +32,4 @@ def test_cli_file_in() -> None:
 
         res = runner.invoke(main, "Carne_job.mp4 -y".split())
         assert res.exit_code == 0
-        assert "Carne_job.mp4:9878103:9117977" in res.output
+        assert "Carne_job.mp4:9878103:9117977" in set(res.output.split("\n"))
