@@ -42,6 +42,7 @@ pytest-cov = '^2.6'
 prospector = '^1.1'
 mypy = '^0.630.0'
 sphinx-click = "^1.3"
+hypothesis = "^3.75"
 
 [tool.poetry.dependencies]
 ffmpeg-python = '^0.1.16'

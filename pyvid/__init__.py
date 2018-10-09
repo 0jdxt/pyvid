@@ -1,5 +1,8 @@
+#!/usr/bin/env python
+# -*- encoding: utf-8
+"""pyvid package. converts files in path to smaller mp4 files."""
 import os
-from typing import List, Tuple
+from typing import Tuple
 
 import ffmpeg
 import click
@@ -20,7 +23,8 @@ __version__ = poetry_conf['tool']['poetry']['version']
 @click.option('-y', '--force', is_flag=True, help='Disable convert prompt')
 @click.option('-d', '--rem', is_flag=True, help='Delete source video file(s)')
 @click.version_option()
-def main(path:str, ext:str, force:bool, rem:bool) -> None:
+def main(path: str, ext: str, force: bool, rem: bool) -> None:
+    """Convert video(s) in specified path."""
     if ext:
         click.echo(f'extension: {ext}')
 
@@ -31,6 +35,7 @@ def main(path:str, ext:str, force:bool, rem:bool) -> None:
 
 
 def convert_files(vids: VideoPath, logger: Logger) -> None:
+    """Convert file in VideoPath object."""
     top = vids if vids.is_dir() else vids.parent
     n_proc = 0
 
@@ -68,43 +73,45 @@ def convert_files(vids: VideoPath, logger: Logger) -> None:
 
 
 def convert_video(vid: Video) -> Tuple[bool, int]:
-        prompt = click.style(str(vid.path), fg='yellow')
-        prompt += ' -> '
-        prompt += click.style(str(vid.conv_path.parent), fg='green') + '\\'
-        prompt += click.style(vid.conv_path.name, fg='yellow') + '\n'
-        prompt += 'continue? (y)es/(n)o/(c)ancel all'
-        click.echo(prompt)
+    """Use fmmpeg to convert Video object."""
+    prompt = click.style(str(vid.path), fg='yellow')
+    prompt += ' -> '
+    prompt += click.style(str(vid.conv_path.parent), fg='green') + '\\'
+    prompt += click.style(vid.conv_path.name, fg='yellow') + '\n'
+    prompt += 'continue? (y)es/(n)o/(c)ancel all'
+    click.echo(prompt)
 
-        opt = 'y' if vid.force else click.getchar()
-        if opt == 'y':
-            os.makedirs(vid.conv_path.parent, exist_ok=True)
+    opt = 'y' if vid.force else click.getchar()
+    if opt == 'y':
+        os.makedirs(vid.conv_path.parent, exist_ok=True)
 
-            stream = ffmpeg.input(str(vid.path))
-            stream = ffmpeg.output(
-                stream,
-                str(vid.conv_path),
-                vcodec='libx264',
-                crf=20,
-                acodec='copy',
-                preset='veryfast')
+        stream = ffmpeg.input(str(vid.path))
+        stream = ffmpeg.output(
+            stream,
+            str(vid.conv_path),
+            vcodec='libx264',
+            crf=20,
+            acodec='copy',
+            preset='veryfast')
 
-            click.echo(f'converting {vid.path}...', nl=False)
-            try:
-                with spin.spinner():
-                    err, out = ffmpeg.run(stream, quiet=True, overwrite_output=True)
-            except KeyboardInterrupt:
-                click.echo('aborted')
-                os.remove(vid.conv_path)
-                vid.conv_path.parent.rmdir()
-                return False, 0
-            except FileNotFoundError:
-                raise OSError('ffmpeg is either not installed or not in PATH')
+        click.echo(f'converting {vid.path}...', nl=False)
+        try:
+            with spin.spinner():
+                err, out = ffmpeg.run(stream, quiet=True,
+                                      overwrite_output=True)
+        except KeyboardInterrupt:
+            click.echo('aborted')
+            os.remove(vid.conv_path)
+            vid.conv_path.parent.rmdir()
+            return False, 0
+        except FileNotFoundError:
+            raise OSError('ffmpeg is either not installed or not in PATH')
 
-            click.echo('done')
-            vid.converted = vid.conv_path.stat().st_size
-            return True, 0
+        click.echo('done')
+        vid.converted = vid.conv_path.stat().st_size
+        return True, 0
 
-        if opt == 'c':
-            return False, 1
-        # default [n]
-        return False, 0
+    if opt == 'c':
+        return False, 1
+    # default option n
+    return False, 0
