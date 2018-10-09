@@ -26,9 +26,9 @@ copyright = "2018, jdxt"
 author = "jdxt"
 
 # The short X.Y version
-version = __version__
+version = "0.1"
 # The full version, including alpha/beta/rc tags
-release = "0.1"
+release = "0.0.6-alpha"
 
 
 # -- General configuration ---------------------------------------------------
