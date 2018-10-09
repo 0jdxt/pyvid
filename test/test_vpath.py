@@ -1,7 +1,5 @@
 from pathlib import Path
 
-import pytest
-
 from pyvid.classes import VideoPath, Video
 
 

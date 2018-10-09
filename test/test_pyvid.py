@@ -33,4 +33,7 @@ def test_cli_file_in() -> None:
 
         res = runner.invoke(main, "Carne_job.mp4 -y".split())
         assert res.exit_code == 0
-        assert re.search(r"^Carne_job.mp4:9878103:9117977$", res.output, re.M)
+
+        with open("stats.txt", "r") as log:
+            text = log.read()
+        assert re.search(r"^Carne_job.mp4:9878103:9117977$", text, re.M)
