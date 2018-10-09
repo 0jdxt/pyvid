@@ -22,6 +22,7 @@ def test_video_class() -> None:
     assert repr(vid) == f"<Video {pth.name} {size(v_size)}>"
 
 
+# TODO: hypothesis
 def test_cli_file_in() -> None:
     with open("files/Carne_job.mp4", "rb") as f:
         orig_vid = f.read()
@@ -36,4 +37,4 @@ def test_cli_file_in() -> None:
 
         with open("stats.txt", "r") as log:
             text = log.read()
-        assert re.search(r"^Carne_job.mp4:9878103:9117977$", text, re.M)
+        assert re.search(r"^Carne_job.mp4:9878103:\d+$", text, re.M)
