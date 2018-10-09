@@ -4,8 +4,6 @@ Welcome to pyvid's documentation!
 .. toctree::
     :titlesonly:
 
-    index
-
 Installation
 ============
 

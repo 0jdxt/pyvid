@@ -7,14 +7,11 @@ from typing import Tuple
 import ffmpeg
 import click
 import click_spinner as spin
-import pytoml
 
 from pyvid.classes import Logger, Video, VideoPath
 
 
-with open("pyproject.toml", "r") as f:
-    poetry_conf = pytoml.load(f)
-__version__ = poetry_conf["tool"]["poetry"]["version"]
+__version__ = "0.0.6"
 
 
 @click.command()
