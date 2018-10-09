@@ -78,10 +78,12 @@ def convert_video(vid: Video) -> Tuple[bool, int]:
     prompt += ' -> '
     prompt += click.style(str(vid.conv_path.parent), fg='green') + '\\'
     prompt += click.style(vid.conv_path.name, fg='yellow') + '\n'
-    prompt += 'continue? (y)es/(n)o/(c)ancel all'
-    click.echo(prompt)
 
+    if not vid.force:
+        prompt += 'continue? (y)es/(n)o/(c)ancel all'
+    click.echo(prompt)
     opt = 'y' if vid.force else click.getchar()
+
     if opt == 'y':
         os.makedirs(vid.conv_path.parent, exist_ok=True)
 

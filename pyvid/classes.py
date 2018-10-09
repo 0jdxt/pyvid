@@ -32,7 +32,7 @@ class Video:
             return os.path.samestat(os.stat(self.path), os.stat(other.path))
         elif isinstance(other, Path):
             return os.path.samestat(os.stat(self.path), os.stat(other))
-        return NotImplemented
+        raise NotImplementedError
 
 
 class VideoPath(type(Path())):
