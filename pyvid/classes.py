@@ -1,7 +1,7 @@
 import itertools
 import os
 import re
-from pathlib import Path, WindowsPath
+from pathlib import Path
 from typing import List, Tuple, Generator, Any
 
 import click
@@ -35,7 +35,7 @@ class Video:
         return NotImplemented
 
 
-class VideoPath(WindowsPath):
+class VideoPath(type(Path())):
 
     def __init__(self,
                 folder:str, ext:str='',
