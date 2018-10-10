@@ -35,7 +35,6 @@ def test_rem_opt() -> None:
             f.write(test_file)
         res = runner.invoke(main, "video.mp4 --rem -y".split())
         assert res.exit_code == 0
-        print(res.output)
         assert not Path("video.mp4").exists()
 
 
