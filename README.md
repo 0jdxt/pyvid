@@ -1,4 +1,4 @@
-# pyvid 0.0.6-alpha
+# pyvid 0.0.7
 
 [![PyPI version](https://badge.fury.io/py/pyvid.svg)](https://badge.fury.io/py/pyvid)
 [![Build Status](https://travis-ci.org/0jdxt/pyvid.svg?branch=master)](https://travis-ci.org/0jdxt/pyvid)
@@ -26,12 +26,12 @@ The following
 pyvid files -e avi
 ```
 
-will convert all `.avi` files in directory `files/` to output directory `converted/files/`
+will convert all `.avi` files in directory `files/` to output directory `files/converted/`
 
 Uses defaults on ffmpeg executable to get high quality and low file size.
 
 ```
-Usage: pyvid [OPTIONS] FOLDER
+Usage: pyvid [OPTIONS] PATH
 
 Options:
   -e, --ext TEXT  File extension to look for
