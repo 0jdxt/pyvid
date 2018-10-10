@@ -52,7 +52,7 @@ def convert_files(vids: VideoPath, logger: Logger) -> None:
         n_proc += 1
 
         if vids.rem:
-            os.remove(vid)
+            os.remove(vid.path)
 
     if n_proc:
         logger.summarise(n_proc)
@@ -71,10 +71,14 @@ def convert_files(vids: VideoPath, logger: Logger) -> None:
 
 def convert_video(vid: Video) -> Tuple[bool, int]:
     """Use fmmpeg to convert Video object."""
-    prompt = click.style(str(vid.path), fg="yellow")
-    prompt += " -> "
-    prompt += click.style(str(vid.conv_path.parent), fg="green") + "\\"
-    prompt += click.style(vid.conv_path.name, fg="yellow") + "\n"
+    prompt = (
+        click.style(str(vid.path), fg="yellow")
+        + " -> "
+        + click.style(str(vid.conv_path.parent), fg="green")
+        + "\\"
+        + click.style(vid.conv_path.name, fg="yellow")
+        + "\n"
+    )
 
     if not vid.force:
         prompt += "continue? (y)es/(n)o/(c)ancel all"
