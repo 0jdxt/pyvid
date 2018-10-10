@@ -11,7 +11,7 @@ import click_spinner as spin
 from pyvid.classes import Logger, Video, VideoPath
 
 
-__version__ = "0.0.6"
+__version__ = "0.0.7"
 
 
 @click.command()

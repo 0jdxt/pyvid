@@ -5,15 +5,15 @@
 [![Documentation Status](https://readthedocs.org/projects/pyvid/badge/?version=latest)](https://pyvid.readthedocs.io/en/latest/?badge=latest)
 [![Coverage Status](https://coveralls.io/repos/github/0jdxt/pyvid/badge.svg?branch=master)](https://coveralls.io/github/0jdxt/pyvid?branch=master)
 
-
 ## Dependencies
+
 - [install](https://www.ffmpeg.org/download.html)
   ffmpeg and make sure the executable is in PATH
-- only works on windows atm
 
 ## Installation
 
 Install as global executable
+
 ```
 pip install pyvid
 ```
@@ -21,9 +21,11 @@ pip install pyvid
 ## Usage
 
 The following
+
 ```
 pyvid files -e avi
 ```
+
 will convert all `.avi` files in directory `files/` to output directory `converted/files/`
 
 Uses defaults on ffmpeg executable to get high quality and low file size.

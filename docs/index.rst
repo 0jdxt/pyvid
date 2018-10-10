@@ -22,7 +22,7 @@ Install using pip::
 check installation::
 
     $ pyvid --version
-    pyvid, version 0.0.5
+    pyvid, version 0.0.7
 
 Usage
 =====
