@@ -18,9 +18,9 @@ def test_file_vpath_folder() -> None:
     p = Path(folder)
     fs = VideoPath(folder)
 
-    files = [p / ("Carne_job." + x) for x in ["mp4", "mov", "webm"]]
+    vids = [p / ("Carne_job." + x) for x in ["mp4", "mov", "webm"]]
 
-    for i, fname in enumerate(fs):
-        assert fname == files[i]
+    for i, vid in enumerate(fs):
+        assert vid == vids[i]
     assert fs.is_dir()
     assert not fs.is_file()
