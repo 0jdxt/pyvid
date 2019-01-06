@@ -1,0 +1,62 @@
+[tool.poetry]
+name = 'pyvid'
+version = "0.0.9"
+description = 'Video conversion utility using ffmpeg'
+
+authors = [
+    'jdxt <jytrn@protonmail.com>'
+]
+
+readme = 'README.md'
+
+license = 'MIT'
+
+homepage = 'https://github.com/0jdxt/pyvid'
+repository = 'https://github.com/0jdxt/pyvid'
+documentation = 'https://pyvid.readthedocs.io/en/latest/'
+
+classifiers = [
+    'Development Status :: 3 - Alpha',
+    'Environment :: Console',
+    'Environment :: Win32 (MS Windows)',
+    'Intended Audience :: Developers',
+    'Intended Audience :: Education',
+    'License :: Freeware',
+    'Natural Language :: English',
+    'Operating System :: Microsoft :: Windows :: Windows 10',
+    'Programming Language :: Python',
+    'Programming Language :: Python :: 3.6',
+    'Programming Language :: Python :: 3.7',
+    'Topic :: Multimedia :: Video :: Conversion',
+    'Topic :: Utilities'
+]
+
+
+keywords = ['windows', 'cli', 'video', 'conversion', 'ffmpeg', 'tools']
+
+packages = [{include = 'pyvid.py'}]
+
+[tool.poetry.dev-dependencies]
+pytest = '^3.8'
+prospector = '^1.1'
+mypy = '^0.630.0'
+sphinx-click = "^1.3"
+hypothesis = "^3.75"
+python-coveralls = "^2.9"
+
+[tool.poetry.dependencies]
+python = '^3.6'
+ffmpeg-python = '^0.1.16'
+click = '^7.0'
+'hurry.filesize' = '^0.9.0'
+click-spinner = '^0.1.8'
+pytoml = "^0.1.19"
+tqdm = "^4.28"
+
+[tool.poetry.scripts]
+pyvid = 'pyvid:main'
+
+[tool.black]
+py37 = true
+include = '\.py$'
+exclude = '^(\.vscode|build)$'
