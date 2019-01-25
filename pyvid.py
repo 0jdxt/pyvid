@@ -13,7 +13,7 @@ import click
 import click_spinner as spin
 from hurry.filesize import size
 
-__version__ = "0.1.0"
+__version__ = "0.1.1"
 
 # TODO: convert yes/no to click choice thing
 
