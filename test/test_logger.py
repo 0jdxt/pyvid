@@ -57,13 +57,9 @@ def test_summ() -> None:
 
     logger.summarise(n_lines)
     ll = logger.get(1)[0]
-    rex = r"(?P<p>\d+)%.+ (?P<o>\d{1,3}[BKMG]) -> (?P<c>\d{1,3}[BKMG])$"
-    summary_re = re.compile(rex)
-    m = summary_re.search(ll)
+    m = re.search(r"(\d{1,3}[KMG]?)B -> (\d{1,3}[KMG]?)B$", ll)
 
     assert m
-    assert m.group("o") == orig
-    assert m.group("c") == conv
-    assert "19" <= m.group("p") <= "20"
+    assert m.groups() == (orig, conv)
 
     os.remove(fname)

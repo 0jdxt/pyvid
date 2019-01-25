@@ -13,3 +13,4 @@ files/converted/
 
 .coverage
 *stats.txt
+*.sublime-*
