@@ -11,7 +11,7 @@ Pyvid is a package that shrinks video files using defaults on ffmpeg to get high
 ## Dependencies
 
 - [install](https://www.ffmpeg.org/download.html)
-  ffmpeg with libx264 or libx265 support and make sure the executable is in $PATH
+  ffmpeg with libx264 or libx265 support and make sure the executable can be found with the `$PATH` environment variable.
 
 ## Installation
 
@@ -29,7 +29,7 @@ The most basic usage is as follows:
 pyvid PATH
 ```
 
-where PATH is a file or directory. If PATH is a directory, it will look for video files. Converted videos are placed in a `converted/` subfolder.
+where `PATH` is a file or directory. If `PATH` is a directory, it will look for video files. Converted videos are placed in a `converted/` subfolder.
 
 The following
 
