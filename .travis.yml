@@ -3,18 +3,18 @@ os:
   - linux
 python:
   - "3.6"
-  - "3.7-dev"
 sudo: required
 before_install:
-  - sudo apt install software-properties-common build-dep build-essential
+  - sudo apt install software-properties-common build-essential
   - sudo add-apt-repository -y ppa:jonathonf/ffmpeg-4
   - sudo apt-get update
   - sudo apt-get install -y ffmpeg
   - ffmpeg -hwaccels
+  - pip install poetry
 install:
-  - pip install -r requirements.txt
+  - poetry install
 script:
-  - coverage run --source pyvid -m pytest
-  - coverage report
+  - poetry run coverage run --source pyvid -m pytest
+  - poetry run coverage report
 after_success:
   - coveralls
