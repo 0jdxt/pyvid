@@ -15,7 +15,7 @@ from hurry.filesize import size
 
 __version__ = "0.1.1"
 
-# TODO: convert yes/no to click choice thing
+# TODO: convert yes/no to click choice
 
 
 class Logger:
@@ -26,7 +26,7 @@ class Logger:
     def __init__(self, fname: str, append: bool = False) -> None:
         """Store ref to fname and create fresh log unless append is True"""
         self._fname = fname
-        if append:
+        if not append:
             self.reset()
 
     def __repr__(self) -> str:
@@ -262,11 +262,10 @@ def get_codec() -> str:
     ).stdout
     for line in codecs.splitlines():
         # check the codecs exist and have the encoding ability
-        if b"264" in line and b"E" in line[:3]:
-            return "libx264"
-
         if b"265" in line and b"E" in line[:3]:
             return "libx265"
+        if b"264" in line and b"E" in line[:3]:
+            return "libx264"
     return ""
 
 
