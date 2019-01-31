@@ -5,10 +5,11 @@ python:
   - "3.6"
 sudo: required
 before_install:
-  - sudo apt install software-properties-common build-essential
-  - sudo add-apt-repository -y ppa:jonathonf/ffmpeg-4
-  - sudo apt-get update
-  - sudo apt-get install -y ffmpeg
+  - sudo apt install software-properties-common build-essential -y
+  - sudo add-apt-repository ppa:jonathonf/ffmpeg-4 -y
+  - sudo apt update && sudo apt full-upgrade
+  - sudo apt install libavcodec58 libavdevice58 libavfilter7 libavformat58
+  - sudo apt install ffmpeg -y
   - ffmpeg -hwaccels
   - pip install poetry
 install:
