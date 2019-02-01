@@ -74,12 +74,7 @@ class VideoPath(os.PathLike):
     __slots__ = ("path", "codec", "exts", "force", "rem")
 
     def __init__(
-        self,
-        path: str,
-        codec: str,
-        ext: str = "",
-        force: bool = False,
-        rem: bool = False,
+        self, path: str, codec: str, ext: str, force: bool = False, rem: bool = False
     ) -> None:
 
         self.path = Path(path)
@@ -87,11 +82,8 @@ class VideoPath(os.PathLike):
         self.force = force
         self.rem = rem
 
-        self.exts = (
-            [x.replace(".", "") for x in ext.split(",") if x]
-            if ext
-            else ["mp4", "avi", "mkv", "mov", "webm"]
-        )
+        # ext = ext or "mp4,avi,mkv,mov,webm"
+        self.exts = [x.replace(".", "") for x in ext.split(",") if x]
 
         self.videos = (
             [Video(self.path, self.force)]
@@ -186,7 +178,7 @@ def convert_files(vids: VideoPath, logger: Logger, dbl_force: bool) -> None:
         n_proc += 1
 
         if vids.rem:
-            print(f"removing {vid.path}")
+            click.echo(f"removing {vid.path}")
             os.remove(vid.path)
 
     if n_proc:
@@ -217,7 +209,11 @@ def convert_video(codec: str, vid: Video, idx: int, nvid: int) -> Tuple[bool, in
 
         click.echo(prompt, nl=False)
 
-    opt = "y" if vid.force else click.getchar(echo=True)
+    if vid.force:
+        opt = "y"
+    else:
+        opt = click.getchar()
+        click.echo(opt)
 
     if opt == "y":
         os.makedirs(vid.conv_path.parent, exist_ok=True)
@@ -260,19 +256,26 @@ def get_codec() -> str:
     codecs = subprocess.run(
         ["ffmpeg", "-codecs"], stdout=subprocess.PIPE, stderr=subprocess.PIPE
     ).stdout
+
+    i = 0
     for line in codecs.splitlines():
         # check the codecs exist and have the encoding ability
-        if b"265" in line and b"E" in line[:3]:
-            return "libx265"
-        if b"264" in line and b"E" in line[:3]:
-            return "libx264"
-    return ""
+        if not i and b"264" in line and b"E" in line[:3]:
+            i = 1
+        elif b"265" in line and b"E" in line[:3]:
+            i = 2
+            break
+
+    return ["", "libx264", "libx265"][i]
 
 
 @click.command()
 @click.argument("path", type=click.Path(exists=True))
 @click.option(
-    "-e", "--ext", help="Comma seperated list of file extension(s) to look for"
+    "-e",
+    "--ext",
+    default="mp4,avi,mkv,mov,webm",
+    help="Comma seperated list of file extension(s) to look for",
 )
 @click.option(
     "-y",
@@ -282,7 +285,7 @@ def get_codec() -> str:
 )
 @click.option("-d", "--rem", is_flag=True, help="Delete source video files")
 @click.version_option()
-def main(path: str, ext: str, force: bool, rem: bool) -> None:
+def main(path: str, ext: str, force: int, rem: bool) -> None:
     """Convert video(s) in specified path."""
 
     # look for ffmpeg

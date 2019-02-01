@@ -15,7 +15,7 @@ def test_file_vpath_file() -> None:
 def test_file_vpath_folder() -> None:
     folder = "files"
     p = Path(folder)
-    fs = VideoPath(folder, codec="libx265")
+    fs = VideoPath(folder, codec="libx265", ext="")
 
     vids = [p / ("Carne_job." + x) for x in ["mp4", "mov", "webm"]]
 
