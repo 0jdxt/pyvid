@@ -62,10 +62,7 @@ class Logger:
 
         if tot_o:
             rel_size = round(tot_c * 100 / tot_o)
-            self.log(
-                "-- Batch of %d: %d%% of original size %sB -> %sB"
-                % (num, rel_size, size(tot_o), size(tot_c))
-            )
+            self.log("-- Batch of %d: %d%% of original size %sB -> %sB" % (num, rel_size, size(tot_o), size(tot_c)))
         else:
             click.echo("summary not written")
 
@@ -73,9 +70,7 @@ class Logger:
 class VideoPath(os.PathLike):
     __slots__ = ("path", "codec", "exts", "force", "rem")
 
-    def __init__(
-        self, path: str, codec: str, ext: str, force: bool = False, rem: bool = False
-    ) -> None:
+    def __init__(self, path: str, codec: str, ext: str, force: bool = False, rem: bool = False) -> None:
 
         self.path = Path(path)
         self.codec = codec
@@ -88,11 +83,7 @@ class VideoPath(os.PathLike):
         self.videos = (
             [Video(self.path, self.force)]
             if self.path.is_file()
-            else [
-                Video(z, self.force)
-                for y in self.exts
-                for z in self.path.glob("*." + y)
-            ]
+            else [Video(z, self.force) for y in self.exts for z in self.path.glob("*." + y)]
         )
 
     def __iter__(self):
@@ -112,7 +103,7 @@ class Video:
         self.converted = 0
         self.force = force
 
-        conv_name = self.path.with_suffix(".mp4").name
+        conv_name = self.path.name
         self.conv_path = self.path.parent / "converted" / conv_name
 
     @property
@@ -136,7 +127,7 @@ def convert_files(vids: VideoPath, logger: Logger, dbl_force: bool) -> None:
     n_proc = 0
 
     n_vids = len(vids.videos)
-    i = 1
+    counter = 1
 
     # click.echo(f"output directory: {vids.conv_path}")
 
@@ -163,12 +154,12 @@ def convert_files(vids: VideoPath, logger: Logger, dbl_force: bool) -> None:
             logger.log(f"CONVERTING FILES IN {top}")
 
         try:
-            success, code = convert_video(vids.codec, vid, i, n_vids)
+            success, code = convert_video(vids.codec, vid, counter, n_vids)
         except KeyboardInterrupt:
             print("KI")
             success, code = False, 0
 
-        i += 1
+        counter += 1
         if not success:
             if code:
                 break
@@ -196,10 +187,12 @@ def convert_files(vids: VideoPath, logger: Logger, dbl_force: bool) -> None:
         click.echo(f"\nNO VIDEO FILES CONVERTED IN {top}")
 
 
-def convert_video(codec: str, vid: Video, idx: int, nvid: int) -> Tuple[bool, int]:
+def convert_video(codec: str, vid: Video, counter: int, nvid: int) -> Tuple[bool, int]:
     """Use fmmpeg to convert Video object."""
 
-    if not vid.force:
+    if vid.force:
+        opt = "y"
+    else:
         prompt = (
             click.style(str(vid.path), fg="yellow")
             + " -> "
@@ -208,10 +201,6 @@ def convert_video(codec: str, vid: Video, idx: int, nvid: int) -> Tuple[bool, in
         )
 
         click.echo(prompt, nl=False)
-
-    if vid.force:
-        opt = "y"
-    else:
         opt = click.getchar()
         click.echo(opt)
 
@@ -219,16 +208,9 @@ def convert_video(codec: str, vid: Video, idx: int, nvid: int) -> Tuple[bool, in
         os.makedirs(vid.conv_path.parent, exist_ok=True)
 
         stream = ffmpeg.input(str(vid.path))
-        stream = ffmpeg.output(
-            stream,
-            str(vid.conv_path),
-            vcodec=codec,
-            crf=24,
-            acodec="copy",
-            preset="veryfast",
-        )
+        stream = ffmpeg.output(stream, str(vid.conv_path), vcodec=codec, crf=24, acodec="copy", preset="veryfast")
 
-        click.echo(f"[{idx}/{nvid}] converting {vid.path}...", nl=False)
+        click.echo(f"[{counter}/{nvid}] converting {vid.path}...", nl=False)
 
         with spin.spinner():
             try:
@@ -237,6 +219,7 @@ def convert_video(codec: str, vid: Video, idx: int, nvid: int) -> Tuple[bool, in
                 click.echo("\baborted")
                 os.remove(vid.conv_path)
                 vid.conv_path.parent.rmdir()  # only removes if empty
+                # add quit option afer ctrl-c
                 return False, 0
             except ffmpeg.Error as e:
                 click.echo("\bffmpeg error:")
@@ -253,9 +236,7 @@ def convert_video(codec: str, vid: Video, idx: int, nvid: int) -> Tuple[bool, in
 
 
 def get_codec() -> str:
-    codecs = subprocess.run(
-        ["ffmpeg", "-codecs"], stdout=subprocess.PIPE, stderr=subprocess.PIPE
-    ).stdout
+    codecs = subprocess.run(["ffmpeg", "-codecs"], stdout=subprocess.PIPE, stderr=subprocess.PIPE).stdout
 
     i = 0
     for line in codecs.splitlines():
@@ -272,16 +253,10 @@ def get_codec() -> str:
 @click.command()
 @click.argument("path", type=click.Path(exists=True))
 @click.option(
-    "-e",
-    "--ext",
-    default="mp4,avi,mkv,mov,webm",
-    help="Comma seperated list of file extension(s) to look for",
+    "-e", "--ext", default="mp4,avi,mkv,mov,webm", help="Comma seperated list of file extension(s) to look for"
 )
 @click.option(
-    "-y",
-    "--force",
-    count=True,
-    help="A single count disables per-video prompts. A count of 2 disables all prompts.",
+    "-y", "--force", count=True, help="A single count disables per-video prompts. A count of 2 disables all prompts."
 )
 @click.option("-d", "--rem", is_flag=True, help="Delete source video files")
 @click.version_option()
@@ -297,9 +272,7 @@ def main(path: str, ext: str, force: int, rem: bool) -> None:
 
     codec = get_codec()
     if not codec:
-        click.echo(
-            "ERROR: ffmpeg installation supports neither H.264 nor H.265 encoding"
-        )
+        click.echo("ERROR: ffmpeg installation supports neither H.264 nor H.265 encoding")
         sys.exit()
 
     click.echo("codec: ", nl=False)
