@@ -1,0 +1,19 @@
+language: python
+os:
+  - linux
+python:
+  - "3.6"
+sudo: required
+before_install:
+  - sudo add-apt-repository ppa:mc3man/trusty-media -y
+  - sudo apt update
+  - sudo apt install ffmpeg -y
+  - ffmpeg -hwaccels
+  - pip install poetry
+install:
+  - poetry install
+script:
+  - poetry run coverage run --source pyvid -m pytest
+  - poetry run coverage report
+after_success:
+  - coveralls
