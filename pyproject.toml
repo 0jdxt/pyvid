@@ -1,6 +1,6 @@
 [tool.poetry]
 name = 'pyvid'
-version = "0.1.1"
+version = "0.1.2"
 description = 'Video shrinker that uses ffmpeg.'
 
 authors = [
@@ -14,7 +14,6 @@ repository = 'https://github.com/0jdxt/pyvid'
 documentation = 'https://pyvid.readthedocs.io/en/latest/'
 
 classifiers = [
-    'Development Status :: 3 - Alpha',
     'Environment :: Console',
     'Intended Audience :: Developers',
     'Intended Audience :: Education',

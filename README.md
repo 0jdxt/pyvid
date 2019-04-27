@@ -1,4 +1,4 @@
-# pyvid 0.1.1
+# pyvid 0.1.2
 
 [![PyPI version](https://badge.fury.io/py/pyvid.svg)](https://badge.fury.io/py/pyvid)
 [![Build Status](https://travis-ci.org/0jdxt/pyvid.svg?branch=master)](https://travis-ci.org/0jdxt/pyvid)
