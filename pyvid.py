@@ -131,18 +131,14 @@ def convert_files(vids: VideoPath, logger: Logger, dbl_force: bool) -> None:
 
     if vids.path.is_dir():
         top = vids.path
-        click.echo(f"\n{n_vids} file(s) found: ", nl=False)
-        click.secho(str(vids.videos), fg="yellow")
+        click.echo(f"\n{n_vids} file(s) found:")
+        for vid in vids:
+            click.secho(str(vid), fg="yellow")
     else:
         top = vids.path.parent
 
-    if vids.force and not dbl_force:
-        click.echo(f"convert {n_vids} files? (y)es/(n)o: [n] ", nl=False)
-
-        ans = click.getchar(echo=True)
-        click.echo("")
-        if ans != "y":
-            sys.exit()
+    if vids.force and not dbl_force and not click.confirm(f"convert {n_vids} files?"):
+        sys.exit()
 
     for vid in vids:
         if not vids.force:
