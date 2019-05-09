@@ -236,11 +236,18 @@ def get_codec() -> str:
     return ["", "libx264", "libx265"][i]
 
 
+def get_exts() -> str:
+    fformats = subprocess.run(["ffmpeg", "-demuxers"], stdout=subprocess.PIPE, stderr=subprocess.PIPE).stdout
+    exts: List[str] = []
+    for line in fformats.splitlines()[4:]:
+        parts = line.decode().split()
+        exts.extend(parts[1].split(","))
+    return ",".join(exts)
+
+
 @click.command()
-@click.argument("path", type=click.Path(exists=True))
-@click.option(
-    "-e", "--ext", default="mp4,avi,mkv,mov,webm", help="Comma seperated list of file extension(s) to look for"
-)
+@click.argument("path", default=".", type=click.Path(exists=True))
+@click.option("-e", "--ext", default=get_exts(), help="Comma seperated list of file extension(s) to look for")
 @click.option(
     "-y", "--force", count=True, help="A single count disables per-video prompts. A count of 2 disables all prompts."
 )
@@ -263,20 +270,13 @@ def main(path: str, ext: str, force: int, rem: bool) -> None:
 
     click.echo("codec: ", nl=False)
     click.secho(codec, fg="green")
+    click.echo(f"looking for videos at '{path}'")
 
     vp = VideoPath(path, codec, ext=ext, force=bool(force), rem=rem)
-
-    if ext:
-        click.echo("extensions: ", nl=False)
-        click.secho(" ".join(vp.exts), fg="green")
-    else:
-        click.echo(f"looking for videos at '{path}'")
 
     # start conversion
     logger = Logger("stats.txt")
     convert_files(vp, logger, force > 1)
-
-    # launch video?
 
     if not force > 1:
         if click.confirm("view log?"):
