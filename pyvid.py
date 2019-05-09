@@ -65,32 +65,6 @@ class Logger:
             click.echo("summary not written")
 
 
-class VideoPath(os.PathLike):
-    __slots__ = ("path", "codec", "exts", "force", "rem")
-
-    def __init__(self, path: str, codec: str, ext: str, force: bool = False, rem: bool = False) -> None:
-
-        self.path = Path(path)
-        self.codec = codec
-        self.force = force
-        self.rem = rem
-        self.exts = [x.replace(".", "") for x in ext.split(",") if x]
-
-        self.videos = sorted(
-            [Video(self.path, self.force)]
-            if self.path.is_file()
-            else [Video(z, self.force) for y in self.exts for z in self.path.glob("*." + y)]
-        )
-
-    def __iter__(self) -> Iterator["Video"]:
-        return iter(self.videos)
-
-    def __fspath__(self) -> str:
-        return str(self.path)
-
-    __repr__ = __fspath__
-
-
 class Video:
     __slots__ = ("path", "converted", "force", "conv_path")
 
@@ -120,6 +94,32 @@ class Video:
         if isinstance(other, Video):
             return str(self) > str(other)
         return NotImplemented
+
+
+class VideoPath(os.PathLike):
+    __slots__ = ("path", "codec", "exts", "force", "rem")
+
+    def __init__(self, path: str, codec: str, ext: str, force: bool = False, rem: bool = False) -> None:
+
+        self.path = Path(path)
+        self.codec = codec
+        self.force = force
+        self.rem = rem
+        self.exts = [x.replace(".", "") for x in ext.split(",") if x]
+
+        self.videos = sorted(
+            [Video(self.path, self.force)]
+            if self.path.is_file()
+            else [Video(z, self.force) for y in self.exts for z in self.path.glob("*." + y)]
+        )
+
+    def __iter__(self) -> Iterator[Video]:
+        return iter(self.videos)
+
+    def __fspath__(self) -> str:
+        return str(self.path)
+
+    __repr__ = __fspath__
 
 
 def convert_files(vids: VideoPath, logger: Logger, dbl_force: bool) -> None:
