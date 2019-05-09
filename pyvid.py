@@ -15,8 +15,6 @@ from hurry.filesize import size
 
 __version__ = "0.1.2"
 
-# TODO: convert yes/no to click choice
-
 
 class Logger:
     """Logger for video conversion stats"""
@@ -187,24 +185,17 @@ def convert_files(vids: VideoPath, logger: Logger, dbl_force: bool) -> None:
         click.echo(f"\nNO VIDEO FILES CONVERTED IN {top}")
 
 
-def convert_video(codec: str, vid: Video, counter: int, nvid: int) -> Tuple[bool, int]:
-    """Use fmmpeg to convert Video object."""
+def convert_video(codec: str, vid: Video, counter: int, nvid: int) -> bool:
+    """Use ffmpeg to convert Video object."""
 
-    if vid.force:
-        opt = "y"
-    else:
-        prompt = (
-            click.style(str(vid.path), fg="yellow")
-            + " -> "
-            + click.style(str(vid.conv_path.parent / vid.conv_path.name), fg="green")
-            + "\ncontinue? [(y)es/(N)o/(c)ancel all]: "
-        )
+    prompt = (
+        click.style(str(vid.path), fg="yellow")
+        + " -> "
+        + click.style(str(vid.conv_path.parent / vid.conv_path.name), fg="green")
+        + "\ncontinue?"
+    )
 
-        click.echo(prompt, nl=False)
-        opt = click.getchar()
-        click.echo(opt)
-
-    if opt == "y":
+    if vid.force or click.confirm(prompt):
         os.makedirs(vid.conv_path.parent, exist_ok=True)
 
         stream = ffmpeg.input(str(vid.path))
