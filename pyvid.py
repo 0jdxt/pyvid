@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """pyvid package. converts files in path to smaller mp4 files."""
-from typing import List, Tuple, Any
+from typing import List, Tuple, Any, Iterator
 from pathlib import Path
 import os
 import re
@@ -74,20 +74,18 @@ class VideoPath(os.PathLike):
         self.codec = codec
         self.force = force
         self.rem = rem
-
-        # ext = ext or "mp4,avi,mkv,mov,webm"
         self.exts = [x.replace(".", "") for x in ext.split(",") if x]
 
-        self.videos = (
+        self.videos = sorted(
             [Video(self.path, self.force)]
             if self.path.is_file()
             else [Video(z, self.force) for y in self.exts for z in self.path.glob("*." + y)]
         )
 
-    def __iter__(self):
+    def __iter__(self) -> Iterator["Video"]:
         return iter(self.videos)
 
-    def __fspath__(self):
+    def __fspath__(self) -> str:
         return str(self.path)
 
     __repr__ = __fspath__
@@ -105,7 +103,7 @@ class Video:
         self.conv_path = self.path.parent / "converted" / conv_name
 
     @property
-    def size(self):
+    def size(self) -> int:
         return self.path.stat().st_size
 
     def __repr__(self) -> str:
@@ -116,6 +114,11 @@ class Video:
             return os.path.samestat(os.stat(self.path), os.stat(other.path))
         if isinstance(other, Path):
             return os.path.samestat(os.stat(self.path), os.stat(other))
+        return NotImplemented
+
+    def __gt__(self, other: Any) -> bool:
+        if isinstance(other, Video):
+            return str(self) > str(other)
         return NotImplemented
 
 
