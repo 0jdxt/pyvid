@@ -143,12 +143,10 @@ def convert_files(vids: VideoPath, logger: Logger, dbl_force: bool) -> None:
     if vids.force and not dbl_force and not click.confirm(f"convert {n_vids} files?"):
         sys.exit()
 
+    logger.log(f"CONVERTING FILES IN {top}")
     for vid in vids:
         if not vids.force:
             click.echo()
-
-        if not n_proc:
-            logger.log(f"CONVERTING FILES IN {top}")
 
         try:
             success = convert_video(vids.codec, vid, counter, n_vids)
