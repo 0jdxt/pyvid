@@ -148,15 +148,13 @@ def convert_files(vids: VideoPath, logger: Logger, dbl_force: bool) -> None:
             logger.log(f"CONVERTING FILES IN {top}")
 
         try:
-            success, code = convert_video(vids.codec, vid, counter, n_vids)
+            success = convert_video(vids.codec, vid, counter, n_vids)
         except KeyboardInterrupt:
             print("KI")
-            success, code = False, 0
+            success = False
 
         counter += 1
         if not success:
-            if code:
-                break
             continue
 
         logger.log(vid.path.name, vid.size, vid.converted)
@@ -203,23 +201,24 @@ def convert_video(codec: str, vid: Video, counter: int, nvid: int) -> bool:
             try:
                 err, out = ffmpeg.run(stream, overwrite_output=True, quiet=True)
             except KeyboardInterrupt:
+                # check for dbl force and offer quit
                 click.echo("\baborted")
                 os.remove(vid.conv_path)
                 vid.conv_path.parent.rmdir()  # only removes if empty
                 # add quit option afer ctrl-c
-                return False, 0
+                return False
             except ffmpeg.Error as e:
                 click.echo("\bffmpeg error:")
                 click.echo("-" * 10)
                 click.echo(b"\n".join(e.stderr.splitlines()[-5:]))
                 click.echo("-" * 10)
-                return False, 0
+                return False
 
         click.echo(click.style("done", fg="green"))
         vid.converted = vid.conv_path.stat().st_size
-        return True, 0
+        return True
 
-    return False, int(opt == "c")
+    return False
 
 
 def get_codec() -> str:
