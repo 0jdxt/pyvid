@@ -60,7 +60,10 @@ class Logger:
 
         if tot_o:
             rel_size = round(tot_c * 100 / tot_o)
-            self.log("-- Batch of %d: %d%% of original size %sB -> %sB" % (num, rel_size, size(tot_o), size(tot_c)))
+            self.log(
+                "-- Batch of %d: %d%% of original size %sB -> %sB"
+                % (num, rel_size, size(tot_o), size(tot_c))
+            )
         else:
             click.echo("summary not written")
 
@@ -99,7 +102,9 @@ class Video:
 class VideoPath(os.PathLike):
     __slots__ = ("path", "codec", "exts", "force", "rem")
 
-    def __init__(self, path: str, codec: str, ext: str, force: bool = False, rem: bool = False) -> None:
+    def __init__(
+        self, path: str, codec: str, ext: str, force: bool = False, rem: bool = False
+    ) -> None:
 
         self.path = Path(path)
         self.codec = codec
@@ -110,7 +115,9 @@ class VideoPath(os.PathLike):
         self.videos = sorted(
             [Video(self.path, self.force)]
             if self.path.is_file()
-            else [Video(z, self.force) for y in self.exts for z in self.path.glob("*." + y)]
+            else [
+                Video(z, self.force) for y in self.exts for z in self.path.glob("*." + y)
+            ]
         )
 
     def __iter__(self) -> Iterator[Video]:
@@ -135,8 +142,7 @@ def convert_files(vids: VideoPath, logger: Logger, dbl_force: bool) -> None:
     if vids.path.is_dir():
         top = vids.path
         click.echo(f"\n{n_vids} file(s) found:")
-        for vid in vids:
-            click.secho(str(vid), fg="yellow")
+        click.secho("\n".join(str(v) for v in vids), fg="yellow")
     else:
         top = vids.path.parent
 
@@ -194,7 +200,14 @@ def convert_video(codec: str, vid: Video, counter: int, nvid: int) -> bool:
         os.makedirs(vid.conv_path.parent, exist_ok=True)
 
         stream = ffmpeg.input(str(vid.path))
-        stream = ffmpeg.output(stream, str(vid.conv_path), vcodec=codec, crf=24, acodec="copy", preset="veryfast")
+        stream = ffmpeg.output(
+            stream,
+            str(vid.conv_path),
+            vcodec=codec,
+            crf=24,
+            acodec="copy",
+            preset="veryfast",
+        )
 
         click.echo(f"[{counter}/{nvid}] converting {vid.path}...", nl=False)
 
@@ -223,7 +236,9 @@ def convert_video(codec: str, vid: Video, counter: int, nvid: int) -> bool:
 
 
 def get_codec() -> str:
-    codecs = subprocess.run(["ffmpeg", "-codecs"], stdout=subprocess.PIPE, stderr=subprocess.PIPE).stdout
+    codecs = subprocess.run(
+        ["ffmpeg", "-codecs"], stdout=subprocess.PIPE, stderr=subprocess.PIPE
+    ).stdout
 
     i = 0
     for line in codecs.splitlines():
@@ -238,7 +253,9 @@ def get_codec() -> str:
 
 
 def get_exts() -> str:
-    fformats = subprocess.run(["ffmpeg", "-demuxers"], stdout=subprocess.PIPE, stderr=subprocess.PIPE).stdout
+    fformats = subprocess.run(
+        ["ffmpeg", "-demuxers"], stdout=subprocess.PIPE, stderr=subprocess.PIPE
+    ).stdout
     exts: List[str] = []
     for line in fformats.splitlines()[4:]:
         parts = line.decode().split()
@@ -248,9 +265,17 @@ def get_exts() -> str:
 
 @click.command()
 @click.argument("path", default=".", type=click.Path(exists=True))
-@click.option("-e", "--ext", default=get_exts(), help="Comma seperated list of file extension(s) to look for")
 @click.option(
-    "-y", "--force", count=True, help="A single count disables per-video prompts. A count of 2 disables all prompts."
+    "-e",
+    "--ext",
+    default=get_exts(),
+    help="Comma seperated list of file extension(s) to look for",
+)
+@click.option(
+    "-y",
+    "--force",
+    count=True,
+    help="A single count disables per-video prompts. A count of 2 disables all prompts.",
 )
 @click.option("-d", "--rem", is_flag=True, help="Delete source video files")
 @click.version_option()
